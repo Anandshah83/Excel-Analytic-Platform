@@ -10,16 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.8.1",
     "axios": "^1.6.0",
     "chart.js": "^4.4.0",
-    "react-chartjs-2": "^5.2.0",
-    "react-dropzone": "^14.2.3",
-    "recharts": "^2.8.0",
-    "lucide-react": "^0.263.1",
     "clsx": "^2.0.0",
+    "lucide-react": "^0.263.1",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-router-dom": "^6.8.1",
+    "recharts": "^2.8.0",
     "tailwind-merge": "^1.14.0"
   },
   "devDependencies": {
