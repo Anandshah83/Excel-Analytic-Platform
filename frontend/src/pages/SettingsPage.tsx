@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   User,
-  Settings,
   Shield,
   Bell,
   Eye,
