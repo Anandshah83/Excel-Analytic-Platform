@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { User, AuthContextType } from '../types';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -23,6 +24,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Set up axios defaults
   useEffect(() => {
+    axios.defaults.baseURL = API_BASE_URL;
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
@@ -35,7 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get('/api/auth/me');
+          const response = await axios.get(API_ENDPOINTS.AUTH_ME);
           setUser(response.data);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -51,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(API_ENDPOINTS.AUTH_LOGIN, { email, password });
       const { token: newToken, user: userData } = response.data;
       
       localStorage.setItem('token', newToken);
@@ -64,7 +66,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signup = async (username: string, email: string, password: string) => {
     try {
-      const response = await axios.post('/api/auth/signup', { username, email, password });
+      const response = await axios.post(API_ENDPOINTS.AUTH_SIGNUP, { username, email, password });
       const { token: newToken, user: userData } = response.data;
       
       localStorage.setItem('token', newToken);

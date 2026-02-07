@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
 import CreateChartModal from '../components/CreateChartModal';
 
 // Register Chart.js components
@@ -110,7 +111,7 @@ const ChartsPage: React.FC = () => {
         };
 
         // Only fetch existing charts - no auto-generation
-        const chartsResponse = await fetch('/api/charts', { headers });
+        const chartsResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_LIST}`, { headers });
         if (chartsResponse.ok) {
           const chartsData = await chartsResponse.json();
           setCharts(chartsData);
@@ -119,7 +120,7 @@ const ChartsPage: React.FC = () => {
         }
 
         // Fetch files (for statistics)
-        const filesResponse = await fetch('/api/files/list', { headers });
+        const filesResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.FILES_LIST}`, { headers });
         if (filesResponse.ok) {
           const filesData = await filesResponse.json();
           setFiles(filesData);
@@ -182,7 +183,7 @@ const ChartsPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/charts/${chartId}`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_DELETE(chartId)}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -204,7 +205,7 @@ const ChartsPage: React.FC = () => {
 
   const handleDownloadChart = async (chartId: string, chartTitle: string) => {
     try {
-      const response = await fetch(`/api/charts/${chartId}/download`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_DOWNLOAD(chartId)}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -236,7 +237,7 @@ const ChartsPage: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/charts/autogen', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_AUTOGEN}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -249,7 +250,7 @@ const ChartsPage: React.FC = () => {
         setError('');
         
         // Refresh charts list
-        const chartsResponse = await fetch('/api/charts', {
+        const chartsResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_LIST}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -325,7 +326,7 @@ const ChartsPage: React.FC = () => {
           onCreate={async (data) => {
             try {
               const token = localStorage.getItem('token');
-              const res = await fetch('/api/charts', {
+              const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_CREATE}`, {
                 method: 'POST',
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -336,7 +337,7 @@ const ChartsPage: React.FC = () => {
               if (res.ok) {
                 setShowCreateModal(false);
                 // Refresh chart list
-                const chartsResponse = await fetch('/api/charts', { headers: { 'Authorization': `Bearer ${token}` } });
+                const chartsResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_LIST}`, { headers: { 'Authorization': `Bearer ${token}` } });
                 if (chartsResponse.ok) {
                   const chartsData = await chartsResponse.json();
                   setCharts(chartsData);

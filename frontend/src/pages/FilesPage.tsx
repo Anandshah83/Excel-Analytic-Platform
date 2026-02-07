@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -83,7 +84,7 @@ const FilesPage: React.FC = () => {
   // Fetch files
   const fetchFiles = async () => {
     try {
-      const response = await fetch('/api/files/list', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.FILES_LIST}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -121,10 +122,10 @@ const FilesPage: React.FC = () => {
     
     const formData = new FormData();
     formData.append('excel', file);
-    console.log('FormData prepared, making request to /api/files/upload');
+    console.log('FormData prepared, making request to upload endpoint');
     
     try {
-      const response = await fetch('/api/files/upload', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.FILES_UPLOAD}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -195,7 +196,7 @@ const FilesPage: React.FC = () => {
 
   const handleDownload = async (fileId: string, fileName: string) => {
     try {
-      const response = await fetch(`/api/files/${fileId}/download`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.FILES_DOWNLOAD(fileId)}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -220,7 +221,7 @@ const FilesPage: React.FC = () => {
   const handleView = async (fileId: string, fileName: string) => {
     try {
       // First, check if chart already exists for this file
-      const chartResponse = await fetch('/api/charts', {
+      const chartResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_LIST}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -238,7 +239,7 @@ const FilesPage: React.FC = () => {
           // No chart exists, offer to create one
           if (window.confirm(`No chart exists for "${fileName}". Would you like to create one?`)) {
             // Only now trigger chart auto-generation for this specific file
-            const autogenResponse = await fetch('/api/charts/autogen', { 
+            const autogenResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_AUTOGEN}`, { 
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -248,7 +249,7 @@ const FilesPage: React.FC = () => {
 
             if (autogenResponse.ok) {
               // Fetch the newly created chart
-              const newChartResponse = await fetch('/api/charts', {
+              const newChartResponse = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CHARTS_LIST}`, {
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -288,7 +289,7 @@ const FilesPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/files/${fileId}`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.FILES_DELETE(fileId)}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

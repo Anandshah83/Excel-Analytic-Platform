@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
 import { BarChart3, FileText, TrendingUp, Users } from 'lucide-react';
 
 interface DashboardData {
@@ -21,7 +22,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('/api/dashboard/', {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.DASHBOARD}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
